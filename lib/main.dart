@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:news_app/screens/home.dart';
 
 void main() {
   runApp(const MainApp());
@@ -11,12 +12,10 @@ class MainApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: const Scaffold(
-        body: Center(
-          child: Text('Hello World!'),
-        ),
+      home: const HomeScreen(),
+      theme: ThemeData(
+        primarySwatch: Colors.indigo,
       ),
-      theme: ThemeData(primarySwatch: Colors.indigo),
     );
   }
 }
