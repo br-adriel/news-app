@@ -18,7 +18,7 @@ class HomeScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Observer(builder: (_) => Text(controller.message.value)),
+            Observer(builder: (_) => Text(controller.message)),
             ElevatedButton(
               onPressed: controller.changeMessage,
               child: const Text("Alterar mensagem"),

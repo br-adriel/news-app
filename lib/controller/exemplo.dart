@@ -1,19 +1,18 @@
 import 'package:mobx/mobx.dart';
+part 'exemplo.g.dart';
 
-class Exemplo {
-  Observable<String> message = Observable<String>("Olá mundo");
+class Exemplo = ControllerBase with _$Exemplo;
 
-  _changeMessage() {
-    if (message.value == "Olá mundo") {
-      message.value = "Tchau mundo";
+abstract class ControllerBase with Store {
+  @observable
+  String message = "Olá mundo";
+
+  @action
+  changeMessage() {
+    if (message == "Olá mundo") {
+      message = "Tchau mundo";
     } else {
-      message.value = "Olá mundo";
+      message = "Olá mundo";
     }
-  }
-
-  late Action changeMessage;
-
-  Exemplo() {
-    changeMessage = Action(_changeMessage);
   }
 }
