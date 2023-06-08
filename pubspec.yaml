@@ -9,6 +9,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_mobx: ^2.0.6+5
+  mobx: ^2.2.0
 
 dev_dependencies:
   flutter_test:
