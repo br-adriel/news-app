@@ -7,10 +7,12 @@ environment:
   sdk: '>=3.0.2 <4.0.0'
 
 dependencies:
+  build_runner: ^2.4.5
   flutter:
     sdk: flutter
   flutter_mobx: ^2.0.6+5
   mobx: ^2.2.0
+  mobx_codegen: ^2.3.0
 
 dev_dependencies:
   flutter_test:
