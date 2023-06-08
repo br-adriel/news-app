@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:news_app/controller/exemplo.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+  final controller = Exemplo();
+
+  HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -9,7 +13,19 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text("Home"),
       ),
-      body: const Center(child: Text("Olá mundo!")),
+      body: Center(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Observer(builder: (_) => Text(controller.message.value)),
+            ElevatedButton(
+              onPressed: controller.changeMessage,
+              child: const Text("Alterar mensagem"),
+            )
+          ],
+        ),
+      ),
     );
   }
 }
