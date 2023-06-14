@@ -10,6 +10,14 @@ class HomeScreen extends StatelessWidget {
 
   HomeScreen({super.key});
 
+  mudarSecao(int index) {
+    if (index == 0) {
+      homeScreenController.irParaRecentes();
+    } else {
+      homeScreenController.irParaPopulares();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Observer(builder: (_) {
@@ -21,19 +29,9 @@ class HomeScreen extends StatelessWidget {
               ? MenuPeriodo()
               : null,
         ),
-        body: Center(
-          child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
-            ElevatedButton(
-              onPressed: homeScreenController.irParaPopulares,
-              child: const Text("Seção popular"),
-            ),
-            ElevatedButton(
-              onPressed: homeScreenController.irParaRecentes,
-              child: const Text("Seção recetes"),
-            ),
-          ]),
-        ),
-      bottomNavigationBar: BottomNavigationBarWidget(),
+        bottomNavigationBar: BottomNavigationBarWidget(
+            onTap: mudarSecao,
+            selectedIndex: homeScreenController.selectedNavbarIndex),
       );
     });
   }

@@ -12,11 +12,15 @@ abstract class ControllerBase with Store {
   @observable
   String titulo = "Latest news";
 
+  @observable
+  int selectedNavbarIndex = 0;
+
   @action
   irParaPopulares() {
     if (secaoAtiva != SecaoAtiva.populares) {
       secaoAtiva = SecaoAtiva.populares;
       titulo = "Popular news";
+      selectedNavbarIndex = 1;
     }
   }
 
@@ -25,6 +29,7 @@ abstract class ControllerBase with Store {
     if (secaoAtiva != SecaoAtiva.recentes) {
       secaoAtiva = SecaoAtiva.recentes;
       titulo = "Latest news";
+      selectedNavbarIndex = 0;
     }
   }
 }

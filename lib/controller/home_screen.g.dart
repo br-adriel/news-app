@@ -41,6 +41,22 @@ mixin _$HomeScreenController on ControllerBase, Store {
     });
   }
 
+  late final _$selectedNavbarIndexAtom =
+      Atom(name: 'ControllerBase.selectedNavbarIndex', context: context);
+
+  @override
+  int get selectedNavbarIndex {
+    _$selectedNavbarIndexAtom.reportRead();
+    return super.selectedNavbarIndex;
+  }
+
+  @override
+  set selectedNavbarIndex(int value) {
+    _$selectedNavbarIndexAtom.reportWrite(value, super.selectedNavbarIndex, () {
+      super.selectedNavbarIndex = value;
+    });
+  }
+
   late final _$ControllerBaseActionController =
       ActionController(name: 'ControllerBase', context: context);
 
@@ -70,7 +86,8 @@ mixin _$HomeScreenController on ControllerBase, Store {
   String toString() {
     return '''
 secaoAtiva: ${secaoAtiva},
-titulo: ${titulo}
+titulo: ${titulo},
+selectedNavbarIndex: ${selectedNavbarIndex}
     ''';
   }
 }
