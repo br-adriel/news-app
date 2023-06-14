@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:news_app/controller/exemplo.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:news_app/widgets/bottom_navigation_bar_widget.dart';
 
 class HomeScreen extends StatelessWidget {
   final controller = Exemplo();
@@ -26,6 +27,7 @@ class HomeScreen extends StatelessWidget {
           ],
         ),
       ),
+      bottomNavigationBar: BottomNavigationBarWidget(),
     );
   }
 }
