@@ -7,7 +7,7 @@ class SearchScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: BarraSuperior(botaoVoltar: true, titulo: "Search articles"),
+      appBar: BarraSuperior(titulo: "Search articles"),
     );
   }
 }
