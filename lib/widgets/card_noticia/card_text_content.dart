@@ -10,17 +10,18 @@ class CardTextContent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.all(8),
+      padding: const EdgeInsets.only(left: 12, right: 12, top: 16, bottom: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             title,
-            style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+            style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w500),
           ),
           Text(
             subtitle,
-            style: const TextStyle(fontSize: 16, fontStyle: FontStyle.italic),
+            style: const TextStyle(
+                fontSize: 14, fontStyle: FontStyle.italic, color: Colors.grey),
           ),
         ],
       ),
