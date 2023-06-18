@@ -1,21 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:news_app/screens/news.dart';
+import 'package:news_app/utils/datas.dart';
 import 'package:news_app/widgets/card_noticia/card_image.dart';
 import 'package:news_app/widgets/card_noticia/card_text_content.dart';
 
-class CardNoticia extends StatelessWidget {
-  final String author;
-  final String imageURL;
-  final String publishDate;
-  final String title;
-  final void Function()? onTap;
+import '../../models/noticia_model.dart';
 
-  const CardNoticia(
-      {super.key,
-      this.title = 'Unknown title',
-      this.author = 'Unknown author',
-      this.publishDate = 'No publish date',
-      this.imageURL = '',
-      this.onTap});
+class CardNoticia extends StatelessWidget {
+  final Noticia noticia;
+
+  const CardNoticia({super.key, required this.noticia});
 
   @override
   Widget build(BuildContext context) {
@@ -25,12 +19,20 @@ class CardNoticia extends StatelessWidget {
         Card(
           child: InkWell(
             borderRadius: const BorderRadius.all(Radius.circular(4)),
-            onTap: onTap,
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => NewsScreen(noticia: noticia),
+                ),
+              );
+            },
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                CardImage(imageURL: imageURL, badgeContent: publishDate),
-                CardTextContent(subtitle: author, title: title)
+                CardImage(
+                    imageURL: noticia.imagemCapa,
+                    badgeContent: dataParaString(noticia.dataPublicacao)),
+                CardTextContent(subtitle: noticia.autor, title: noticia.titulo)
               ],
             ),
           ),
