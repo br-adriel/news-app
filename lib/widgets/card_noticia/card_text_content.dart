@@ -18,6 +18,7 @@ class CardTextContent extends StatelessWidget {
             title,
             style: const TextStyle(fontSize: 22, fontWeight: FontWeight.w500),
           ),
+          const SizedBox(height: 6),
           Text(
             subtitle,
             style: const TextStyle(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:news_app/widgets/badges/blur_badge.dart';
+import 'package:news_app/widgets/cover_image.dart';
 
 class CardImage extends StatelessWidget {
   final String imageURL;
@@ -29,18 +30,11 @@ class CardImage extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                FadeInImage.assetNetwork(
-                  placeholder: placeholder,
-                  image: imageURL,
+                CoverImage(
+                  imageURL: imageURL,
                   fit: fit,
                   height: height,
-                  imageErrorBuilder: (context, error, stackTrace) {
-                    return Image.asset(
-                      placeholder,
-                      fit: fit,
-                      height: height,
-                    );
-                  },
+                  placeholder: placeholder,
                 ),
               ],
             ),
