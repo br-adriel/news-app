@@ -12,7 +12,7 @@ abstract class ControllerBase with Store {
   String pesquisa = '';
 
   @observable
-  bool estaCarregandoPrimeiraVez = true;
+  bool estaCarregandoPrimeiraVez = false;
 
   @observable
   bool estaCarregando = false;
@@ -35,10 +35,12 @@ abstract class ControllerBase with Store {
 
   @action
   Future<void> pesquisar() async {
-    estaCarregandoPrimeiraVez = true;
-    resultados = ObservableList.of([]);
-
     if (pesquisa.isNotEmpty) {
+      estaCarregandoPrimeiraVez = true;
+      resultados = ObservableList.of([]);
+
+      // se o usuario busca por uma sugestão antiga, ela é removida e adicionada
+      // novamente no inicio da lista de sugestoes
       if (sugestoes.contains(pesquisa)) {
         sugestoes.removeWhere((element) => element == pesquisa);
       }
