@@ -16,6 +16,7 @@ dependencies:
   intl: ^0.18.1
   mobx: ^2.2.0
   mobx_codegen: ^2.3.0
+  shared_preferences: ^2.1.2
   url_launcher: ^6.1.11
 
 dev_dependencies:
