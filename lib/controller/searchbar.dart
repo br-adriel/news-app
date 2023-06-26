@@ -15,7 +15,7 @@ abstract class ControllerBase with Store {
   bool estaCarregandoPrimeiraVez = true;
 
   @observable
-  bool estaCarrgando = false;
+  bool estaCarregando = false;
 
   @observable
   ObservableList<String> sugestoes = ObservableList.of([]);
@@ -35,7 +35,7 @@ abstract class ControllerBase with Store {
 
   @action
   Future<void> pesquisar() async {
-    estaCarrgando = true;
+    estaCarregandoPrimeiraVez = true;
     resultados = ObservableList.of([]);
 
     if (pesquisa.isNotEmpty) {
@@ -48,7 +48,11 @@ abstract class ControllerBase with Store {
     final String json = await rootBundle.loadString('assets/amostra.json');
     Map<String, dynamic> dados = jsonDecode(json);
 
+    // imita consulta na api  --------------------------------------------------
     List<dynamic> noticiasNaoTratadas = dados["response"]["docs"];
+    await Future.delayed(const Duration(seconds: 1));
+    // -------------------------------------------------------------------------
+
     List<Noticia> noticias = noticiasNaoTratadas
         .map<Noticia>(
           (noticiaNaoTratada) => Noticia.fromJson(noticiaNaoTratada),
@@ -61,5 +65,6 @@ abstract class ControllerBase with Store {
             noticia.titulo.toLowerCase().contains(pesquisa.toLowerCase()),
       ),
     );
+    estaCarregandoPrimeiraVez = false;
   }
 }

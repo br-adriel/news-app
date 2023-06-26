@@ -42,19 +42,19 @@ mixin _$SearchbarController on ControllerBase, Store {
     });
   }
 
-  late final _$estaCarrgandoAtom =
-      Atom(name: 'ControllerBase.estaCarrgando', context: context);
+  late final _$estaCarregandoAtom =
+      Atom(name: 'ControllerBase.estaCarregando', context: context);
 
   @override
-  bool get estaCarrgando {
-    _$estaCarrgandoAtom.reportRead();
-    return super.estaCarrgando;
+  bool get estaCarregando {
+    _$estaCarregandoAtom.reportRead();
+    return super.estaCarregando;
   }
 
   @override
-  set estaCarrgando(bool value) {
-    _$estaCarrgandoAtom.reportWrite(value, super.estaCarrgando, () {
-      super.estaCarrgando = value;
+  set estaCarregando(bool value) {
+    _$estaCarregandoAtom.reportWrite(value, super.estaCarregando, () {
+      super.estaCarregando = value;
     });
   }
 
@@ -128,7 +128,7 @@ mixin _$SearchbarController on ControllerBase, Store {
     return '''
 pesquisa: ${pesquisa},
 estaCarregandoPrimeiraVez: ${estaCarregandoPrimeiraVez},
-estaCarrgando: ${estaCarrgando},
+estaCarregando: ${estaCarregando},
 sugestoes: ${sugestoes},
 resultados: ${resultados}
     ''';
