@@ -23,7 +23,7 @@ class Noticia {
 
   factory Noticia.fromJson(Map<String, dynamic> json) {
     return Noticia(
-      autor: json['byline']['original'],
+      autor: json['byline']['original'] ?? 'Unknown author',
       dataPublicacao: DateTime.parse(json['pub_date']),
       imagemCapa:
           "${dotenv.env['SITE_BASE_URL']}${json['multimedia'][0]['url']}",
