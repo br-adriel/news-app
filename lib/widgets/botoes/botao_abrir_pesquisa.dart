@@ -15,6 +15,7 @@ class BotaoAbrirPesquisa extends StatelessWidget {
         icon: const Icon(Icons.search),
         tooltip: "Search",
         onPressed: () {
+          controller.initSuggestions();
           showSearch(
             context: context,
             delegate: CustomDelegate(controller),
@@ -53,6 +54,13 @@ class CustomDelegate extends SearchDelegate<String> {
       },
       icon: const Icon(Icons.arrow_back),
     );
+  }
+
+  @override
+  void close(BuildContext context, String result) {
+    controller.storeSeggestions().then((_) {
+      super.close(context, result);
+    });
   }
 
   @override

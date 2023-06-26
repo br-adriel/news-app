@@ -3,11 +3,15 @@ import 'dart:convert';
 import 'package:flutter/services.dart';
 import 'package:mobx/mobx.dart';
 import 'package:news_app/models/noticia_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 part 'searchbar.g.dart';
 
 class SearchbarController = ControllerBase with _$SearchbarController;
 
 abstract class ControllerBase with Store {
+  SharedPreferences? prefs;
+
   @observable
   String pesquisa = '';
 
@@ -28,9 +32,41 @@ abstract class ControllerBase with Store {
     pesquisa = termoBusca.trim();
   }
 
+  void _addSuggestion() {
+    // se o usuario busca por uma sugestão antiga, ela é removida e adicionada
+    // novamente no inicio da lista de sugestoes
+    if (sugestoes.contains(pesquisa)) {
+      sugestoes.removeWhere((element) => element == pesquisa);
+    }
+    sugestoes.insert(0, pesquisa);
+    if (sugestoes.length > 10) {
+      sugestoes.removeLast();
+    }
+  }
+
   @action
   void removeSuggestion(String sugestao) {
     sugestoes.removeWhere((item) => item == sugestao);
+  }
+
+  @action
+  Future<void> initSuggestions() async {
+    prefs ??= await SharedPreferences.getInstance();
+    if (prefs != null) {
+      List<String>? sugestoesArmazenadas = prefs?.getStringList('sugestoes');
+      if (sugestoesArmazenadas != null) {
+        sugestoes = ObservableList.of(sugestoesArmazenadas);
+      }
+    }
+  }
+
+  @action
+  Future<void> storeSeggestions() async {
+    // salva lista no dispositivo
+    prefs ??= await SharedPreferences.getInstance();
+    if (prefs != null) {
+      prefs?.setStringList('sugestoes', sugestoes.toList());
+    }
   }
 
   @action
@@ -39,12 +75,7 @@ abstract class ControllerBase with Store {
       estaCarregandoPrimeiraVez = true;
       resultados = ObservableList.of([]);
 
-      // se o usuario busca por uma sugestão antiga, ela é removida e adicionada
-      // novamente no inicio da lista de sugestoes
-      if (sugestoes.contains(pesquisa)) {
-        sugestoes.removeWhere((element) => element == pesquisa);
-      }
-      sugestoes.insert(0, pesquisa);
+      _addSuggestion();
     }
 
     final String json = await rootBundle.loadString('assets/amostra.json');

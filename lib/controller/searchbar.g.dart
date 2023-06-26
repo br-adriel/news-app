@@ -90,6 +90,22 @@ mixin _$SearchbarController on ControllerBase, Store {
     });
   }
 
+  late final _$initSuggestionsAsyncAction =
+      AsyncAction('ControllerBase.initSuggestions', context: context);
+
+  @override
+  Future<void> initSuggestions() {
+    return _$initSuggestionsAsyncAction.run(() => super.initSuggestions());
+  }
+
+  late final _$storeSeggestionsAsyncAction =
+      AsyncAction('ControllerBase.storeSeggestions', context: context);
+
+  @override
+  Future<void> storeSeggestions() {
+    return _$storeSeggestionsAsyncAction.run(() => super.storeSeggestions());
+  }
+
   late final _$pesquisarAsyncAction =
       AsyncAction('ControllerBase.pesquisar', context: context);
 
