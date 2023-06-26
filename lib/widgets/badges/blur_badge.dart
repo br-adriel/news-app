@@ -10,11 +10,11 @@ class BlurBadge extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ClipRRect(
-      borderRadius: const BorderRadius.all(Radius.circular(100)),
+      borderRadius: const BorderRadius.all(Radius.circular(4)),
       child: Padding(
         padding: const EdgeInsets.all(8),
         child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
+          filter: ImageFilter.blur(sigmaX: 8, sigmaY: 8),
           child: Text(
             text,
             style: const TextStyle(
