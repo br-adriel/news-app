@@ -73,13 +73,86 @@ mixin _$HomeScreenController on ControllerBase, Store {
     });
   }
 
-  late final _$carregarNoticiasRecentesAsyncAction =
-      AsyncAction('ControllerBase.carregarNoticiasRecentes', context: context);
+  late final _$carregandoRecentesAtom =
+      Atom(name: 'ControllerBase.carregandoRecentes', context: context);
 
   @override
-  Future<void> carregarNoticiasRecentes() {
-    return _$carregarNoticiasRecentesAsyncAction
-        .run(() => super.carregarNoticiasRecentes());
+  bool get carregandoRecentes {
+    _$carregandoRecentesAtom.reportRead();
+    return super.carregandoRecentes;
+  }
+
+  @override
+  set carregandoRecentes(bool value) {
+    _$carregandoRecentesAtom.reportWrite(value, super.carregandoRecentes, () {
+      super.carregandoRecentes = value;
+    });
+  }
+
+  late final _$carregandoPopularesAtom =
+      Atom(name: 'ControllerBase.carregandoPopulares', context: context);
+
+  @override
+  bool get carregandoPopulares {
+    _$carregandoPopularesAtom.reportRead();
+    return super.carregandoPopulares;
+  }
+
+  @override
+  set carregandoPopulares(bool value) {
+    _$carregandoPopularesAtom.reportWrite(value, super.carregandoPopulares, () {
+      super.carregandoPopulares = value;
+    });
+  }
+
+  late final _$carregandoRecentesPrimeiraVezAtom = Atom(
+      name: 'ControllerBase.carregandoRecentesPrimeiraVez', context: context);
+
+  @override
+  bool get carregandoRecentesPrimeiraVez {
+    _$carregandoRecentesPrimeiraVezAtom.reportRead();
+    return super.carregandoRecentesPrimeiraVez;
+  }
+
+  @override
+  set carregandoRecentesPrimeiraVez(bool value) {
+    _$carregandoRecentesPrimeiraVezAtom
+        .reportWrite(value, super.carregandoRecentesPrimeiraVez, () {
+      super.carregandoRecentesPrimeiraVez = value;
+    });
+  }
+
+  late final _$carregandoPopularesPrimeiraVezAtom = Atom(
+      name: 'ControllerBase.carregandoPopularesPrimeiraVez', context: context);
+
+  @override
+  bool get carregandoPopularesPrimeiraVez {
+    _$carregandoPopularesPrimeiraVezAtom.reportRead();
+    return super.carregandoPopularesPrimeiraVez;
+  }
+
+  @override
+  set carregandoPopularesPrimeiraVez(bool value) {
+    _$carregandoPopularesPrimeiraVezAtom
+        .reportWrite(value, super.carregandoPopularesPrimeiraVez, () {
+      super.carregandoPopularesPrimeiraVez = value;
+    });
+  }
+
+  late final _$noticiasPopularesAtom =
+      Atom(name: 'ControllerBase.noticiasPopulares', context: context);
+
+  @override
+  ObservableList<Noticia> get noticiasPopulares {
+    _$noticiasPopularesAtom.reportRead();
+    return super.noticiasPopulares;
+  }
+
+  @override
+  set noticiasPopulares(ObservableList<Noticia> value) {
+    _$noticiasPopularesAtom.reportWrite(value, super.noticiasPopulares, () {
+      super.noticiasPopulares = value;
+    });
   }
 
   late final _$ControllerBaseActionController =
@@ -113,7 +186,12 @@ mixin _$HomeScreenController on ControllerBase, Store {
 secaoAtiva: ${secaoAtiva},
 titulo: ${titulo},
 selectedNavbarIndex: ${selectedNavbarIndex},
-noticiasRecentes: ${noticiasRecentes}
+noticiasRecentes: ${noticiasRecentes},
+carregandoRecentes: ${carregandoRecentes},
+carregandoPopulares: ${carregandoPopulares},
+carregandoRecentesPrimeiraVez: ${carregandoRecentesPrimeiraVez},
+carregandoPopularesPrimeiraVez: ${carregandoPopularesPrimeiraVez},
+noticiasPopulares: ${noticiasPopulares}
     ''';
   }
 }
