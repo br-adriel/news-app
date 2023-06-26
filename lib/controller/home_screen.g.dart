@@ -57,6 +57,31 @@ mixin _$HomeScreenController on ControllerBase, Store {
     });
   }
 
+  late final _$noticiasRecentesAtom =
+      Atom(name: 'ControllerBase.noticiasRecentes', context: context);
+
+  @override
+  ObservableList<Noticia> get noticiasRecentes {
+    _$noticiasRecentesAtom.reportRead();
+    return super.noticiasRecentes;
+  }
+
+  @override
+  set noticiasRecentes(ObservableList<Noticia> value) {
+    _$noticiasRecentesAtom.reportWrite(value, super.noticiasRecentes, () {
+      super.noticiasRecentes = value;
+    });
+  }
+
+  late final _$carregarNoticiasRecentesAsyncAction =
+      AsyncAction('ControllerBase.carregarNoticiasRecentes', context: context);
+
+  @override
+  Future<void> carregarNoticiasRecentes() {
+    return _$carregarNoticiasRecentesAsyncAction
+        .run(() => super.carregarNoticiasRecentes());
+  }
+
   late final _$ControllerBaseActionController =
       ActionController(name: 'ControllerBase', context: context);
 
@@ -87,7 +112,8 @@ mixin _$HomeScreenController on ControllerBase, Store {
     return '''
 secaoAtiva: ${secaoAtiva},
 titulo: ${titulo},
-selectedNavbarIndex: ${selectedNavbarIndex}
+selectedNavbarIndex: ${selectedNavbarIndex},
+noticiasRecentes: ${noticiasRecentes}
     ''';
   }
 }
