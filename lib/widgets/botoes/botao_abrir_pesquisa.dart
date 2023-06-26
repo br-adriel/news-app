@@ -61,7 +61,7 @@ class CustomDelegate extends SearchDelegate<String> {
       controller.setPesquisa(query);
       controller.pesquisar();
     }
-    return const SearchScreen();
+    return SearchScreen(searchbarController: controller);
   }
 
   @override
