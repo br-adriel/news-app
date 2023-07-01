@@ -12,12 +12,14 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_dotenv: ^5.1.0
+  flutter_hooks: ^0.18.6
   flutter_launcher_icons: ^0.13.1
   flutter_mobx: ^2.0.6+5
   http: ^1.0.0
   intl: ^0.18.1
   mobx: ^2.2.0
   mobx_codegen: ^2.3.0
+  shared_preferences: ^2.1.2
   url_launcher: ^6.1.11
 
 dev_dependencies:
@@ -31,3 +33,4 @@ flutter:
     - .env
     - assets/
     - assets/img/
+    - assets/amostra.json

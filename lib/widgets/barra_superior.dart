@@ -1,17 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:news_app/controller/searchbar.dart';
 import 'package:news_app/widgets/botoes/botao_abrir_pesquisa.dart';
 
 class BarraSuperior extends StatelessWidget implements PreferredSizeWidget {
   final String? titulo;
-  final bool botaoPesquisar;
   final dynamic menuPopup;
   final List<Widget> acoes = [];
+  final SearchbarController searchbarController;
 
-  BarraSuperior(
-      {super.key, this.titulo, this.menuPopup, this.botaoPesquisar = false}) {
-    if (botaoPesquisar) {
-      acoes.add(const BotaoAbrirPesquisa());
-    }
+  BarraSuperior({
+    super.key,
+    this.titulo,
+    this.menuPopup,
+    required this.searchbarController,
+  }) {
+    acoes.add(BotaoAbrirPesquisa(controller: searchbarController));
     if (menuPopup != null) {
       acoes.add(menuPopup as Widget);
     }
