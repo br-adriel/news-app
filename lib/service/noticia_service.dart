@@ -18,7 +18,7 @@ class NoticiaService {
 
   // declarei a função como estática porque assim dá para usar sem ter que criar
   // um objeto sempre que for chamar o método
-  static Future<List<Noticia>> pesquisarArtigos(String termoDeBusca) async {
+  static Future<List<Noticia>> pesquisarArtigos(String termoDeBusca, int offset) async {
     // implementei esse método para testar, mas ficou faltando fazer a parte do
     // offset, para puxar a partir do post 20, 30, 40 etc
 
@@ -26,6 +26,7 @@ class NoticiaService {
       _endpointPesquisa, // junta a url base com a parte da url da api de busca
       queryParameters: {
         "q": termoDeBusca, // coloca o termo de busca no fim da URL
+        "offset": offset.toString(),
       },
     );
     String jsonString = resposta.data.toString();
@@ -41,4 +42,39 @@ class NoticiaService {
     }
     return List.empty();
   }
+
+  static Future<List<Noticia>> obterPostsPopulares(String periodo) async {
+    String endpoint;
+
+    switch (periodo) {
+      case "Today":
+        endpoint = "viewed/1.json";
+        break;
+      case "This week":
+        endpoint = "viewed/7.json";
+        break;
+      case "This month":
+        endpoint = "viewed/30.json";
+        break;
+      default:
+        throw ArgumentError("Invalid period.");
+    }
+
+    Response<String> resposta = await _dio.get(_endpointPopulares + endpoint);
+
+    String jsonString = resposta.data.toString();
+    Map<String, dynamic> dados = jsonDecode(jsonString);
+
+    if (dados.containsKey("results")) {
+      List<dynamic> postsPopulares = dados["results"];
+      List<Noticia> noticias = postsPopulares.map<Noticia>((postPopular) {
+        return Noticia.fromJson(postPopular);
+      }).toList();
+      return noticias;
+    }
+
+    return [];
+  }
 }
+
+
