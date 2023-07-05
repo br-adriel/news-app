@@ -46,18 +46,14 @@ class NoticiaService {
   static Future<List<Noticia>> obterPostsPopulares(String periodo) async {
     String endpoint;
 
-    switch (periodo) {
-      case "Today":
-        endpoint = "viewed/1.json";
-        break;
-      case "This week":
-        endpoint = "viewed/7.json";
-        break;
-      case "This month":
-        endpoint = "viewed/30.json";
-        break;
-      default:
-        throw ArgumentError("Invalid period.");
+    if (periodo == "Today") {
+      endpoint = "viewed/1.json";
+    } else if (periodo == "This week") {
+      endpoint = "viewed/7.json";
+    } else if (periodo == "This month") {
+      endpoint = "viewed/30.json";
+    } else {
+      throw ArgumentError("Invalid period");
     }
 
     Response<String> resposta = await _dio.get(_endpointPopulares + endpoint);
