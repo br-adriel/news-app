@@ -8,9 +8,7 @@ class ListaNoticias extends HookWidget {
   final Future<void> Function() atualizar;
   final Future<void> Function() atingirFim;
 
-  final ScrollController scrollCtrl = useScrollController();
-
-  ListaNoticias(
+  const ListaNoticias(
       {super.key,
       required this.noticias,
       required this.atualizar,
@@ -18,6 +16,8 @@ class ListaNoticias extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
+    final ScrollController scrollCtrl = useScrollController();
+
     useEffect(() {
       scrollCtrl.addListener(() {
         if (scrollCtrl.position.maxScrollExtent == scrollCtrl.offset) {
