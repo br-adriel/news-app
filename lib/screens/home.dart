@@ -51,7 +51,10 @@ class HomeScreen extends HookWidget {
         ),
         body: mostrarLoading
             ? const LoadingCircular()
-            : ListaNoticias(noticias: noticias),
+            : ListaNoticias(
+                noticias: noticias,
+                atualizar: () async {},
+                atingirFim: () async {}),
         bottomNavigationBar: BottomNavigationBarWidget(
             onTap: mudarSecao,
             selectedIndex: homeScreenController.selectedNavbarIndex),

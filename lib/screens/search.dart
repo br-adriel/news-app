@@ -22,7 +22,11 @@ class SearchScreen extends StatelessWidget {
         return const NoArticlesFound();
       }
       return Scaffold(
-        body: ListaNoticias(noticias: searchbarController.resultados),
+        body: ListaNoticias(
+          noticias: searchbarController.resultados,
+          atingirFim: () async {},
+          atualizar: () async {},
+        ),
       );
     });
   }
