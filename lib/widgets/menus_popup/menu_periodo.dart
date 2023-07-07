@@ -16,13 +16,14 @@ class MenuPeriodo extends StatelessWidget {
     },
   ];
   final void Function(int)? onSelected;
+  final int selected;
 
-  MenuPeriodo({super.key, this.onSelected});
+  MenuPeriodo({super.key, this.onSelected, required this.selected});
 
   @override
   Widget build(BuildContext context) {
     return PopupMenuButton<int>(
-      initialValue: 1,
+      initialValue: selected,
       tooltip: "Date range",
       icon: const Icon(Icons.more_vert),
       itemBuilder: (BuildContext context) {
