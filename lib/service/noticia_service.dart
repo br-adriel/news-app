@@ -18,15 +18,12 @@ class NoticiaService {
 
   // declarei a função como estática porque assim dá para usar sem ter que criar
   // um objeto sempre que for chamar o método
-  static Future<List<Noticia>> pesquisarArtigos(String termoDeBusca, int offset) async {
-    // implementei esse método para testar, mas ficou faltando fazer a parte do
-    // offset, para puxar a partir do post 20, 30, 40 etc
-
+  static Future<List<Noticia>> pesquisarArtigos(String termoDeBusca, int pagina) async {
     Response<String> resposta = await _dio.get(
       _endpointPesquisa, // junta a url base com a parte da url da api de busca
       queryParameters: {
         "q": termoDeBusca, // coloca o termo de busca no fim da URL
-        "offset": offset.toString(),
+        "offset": (pagina * 10).toString(),
       },
     );
     String jsonString = resposta.data.toString();
