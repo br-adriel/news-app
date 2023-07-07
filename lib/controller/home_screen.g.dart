@@ -9,6 +9,23 @@ part of 'home_screen.dart';
 // ignore_for_file: non_constant_identifier_names, unnecessary_brace_in_string_interps, unnecessary_lambdas, prefer_expression_function_bodies, lines_longer_than_80_chars, avoid_as, avoid_annotating_with_dynamic, no_leading_underscores_for_local_identifiers
 
 mixin _$HomeScreenController on ControllerBase, Store {
+  late final _$periodoNoticiasPopularesAtom =
+      Atom(name: 'ControllerBase.periodoNoticiasPopulares', context: context);
+
+  @override
+  int get periodoNoticiasPopulares {
+    _$periodoNoticiasPopularesAtom.reportRead();
+    return super.periodoNoticiasPopulares;
+  }
+
+  @override
+  set periodoNoticiasPopulares(int value) {
+    _$periodoNoticiasPopularesAtom
+        .reportWrite(value, super.periodoNoticiasPopulares, () {
+      super.periodoNoticiasPopulares = value;
+    });
+  }
+
   late final _$secaoAtivaAtom =
       Atom(name: 'ControllerBase.secaoAtiva', context: context);
 
@@ -57,102 +74,44 @@ mixin _$HomeScreenController on ControllerBase, Store {
     });
   }
 
-  late final _$noticiasRecentesAtom =
-      Atom(name: 'ControllerBase.noticiasRecentes', context: context);
+  late final _$mostrarLoadingAtom =
+      Atom(name: 'ControllerBase.mostrarLoading', context: context);
 
   @override
-  ObservableList<Noticia> get noticiasRecentes {
-    _$noticiasRecentesAtom.reportRead();
-    return super.noticiasRecentes;
+  bool get mostrarLoading {
+    _$mostrarLoadingAtom.reportRead();
+    return super.mostrarLoading;
   }
 
   @override
-  set noticiasRecentes(ObservableList<Noticia> value) {
-    _$noticiasRecentesAtom.reportWrite(value, super.noticiasRecentes, () {
-      super.noticiasRecentes = value;
+  set mostrarLoading(bool value) {
+    _$mostrarLoadingAtom.reportWrite(value, super.mostrarLoading, () {
+      super.mostrarLoading = value;
     });
   }
 
-  late final _$carregandoRecentesAtom =
-      Atom(name: 'ControllerBase.carregandoRecentes', context: context);
+  late final _$noticiasExibidasAtom =
+      Atom(name: 'ControllerBase.noticiasExibidas', context: context);
 
   @override
-  bool get carregandoRecentes {
-    _$carregandoRecentesAtom.reportRead();
-    return super.carregandoRecentes;
+  ObservableList<Noticia> get noticiasExibidas {
+    _$noticiasExibidasAtom.reportRead();
+    return super.noticiasExibidas;
   }
 
   @override
-  set carregandoRecentes(bool value) {
-    _$carregandoRecentesAtom.reportWrite(value, super.carregandoRecentes, () {
-      super.carregandoRecentes = value;
+  set noticiasExibidas(ObservableList<Noticia> value) {
+    _$noticiasExibidasAtom.reportWrite(value, super.noticiasExibidas, () {
+      super.noticiasExibidas = value;
     });
   }
 
-  late final _$carregandoPopularesAtom =
-      Atom(name: 'ControllerBase.carregandoPopulares', context: context);
+  late final _$atualizarSecaoAsyncAction =
+      AsyncAction('ControllerBase.atualizarSecao', context: context);
 
   @override
-  bool get carregandoPopulares {
-    _$carregandoPopularesAtom.reportRead();
-    return super.carregandoPopulares;
-  }
-
-  @override
-  set carregandoPopulares(bool value) {
-    _$carregandoPopularesAtom.reportWrite(value, super.carregandoPopulares, () {
-      super.carregandoPopulares = value;
-    });
-  }
-
-  late final _$carregandoRecentesPrimeiraVezAtom = Atom(
-      name: 'ControllerBase.carregandoRecentesPrimeiraVez', context: context);
-
-  @override
-  bool get carregandoRecentesPrimeiraVez {
-    _$carregandoRecentesPrimeiraVezAtom.reportRead();
-    return super.carregandoRecentesPrimeiraVez;
-  }
-
-  @override
-  set carregandoRecentesPrimeiraVez(bool value) {
-    _$carregandoRecentesPrimeiraVezAtom
-        .reportWrite(value, super.carregandoRecentesPrimeiraVez, () {
-      super.carregandoRecentesPrimeiraVez = value;
-    });
-  }
-
-  late final _$carregandoPopularesPrimeiraVezAtom = Atom(
-      name: 'ControllerBase.carregandoPopularesPrimeiraVez', context: context);
-
-  @override
-  bool get carregandoPopularesPrimeiraVez {
-    _$carregandoPopularesPrimeiraVezAtom.reportRead();
-    return super.carregandoPopularesPrimeiraVez;
-  }
-
-  @override
-  set carregandoPopularesPrimeiraVez(bool value) {
-    _$carregandoPopularesPrimeiraVezAtom
-        .reportWrite(value, super.carregandoPopularesPrimeiraVez, () {
-      super.carregandoPopularesPrimeiraVez = value;
-    });
-  }
-
-  late final _$noticiasPopularesAtom =
-      Atom(name: 'ControllerBase.noticiasPopulares', context: context);
-
-  @override
-  ObservableList<Noticia> get noticiasPopulares {
-    _$noticiasPopularesAtom.reportRead();
-    return super.noticiasPopulares;
-  }
-
-  @override
-  set noticiasPopulares(ObservableList<Noticia> value) {
-    _$noticiasPopularesAtom.reportWrite(value, super.noticiasPopulares, () {
-      super.noticiasPopulares = value;
-    });
+  Future<void> atualizarSecao() {
+    return _$atualizarSecaoAsyncAction.run(() => super.atualizarSecao());
   }
 
   late final _$ControllerBaseActionController =
@@ -181,17 +140,36 @@ mixin _$HomeScreenController on ControllerBase, Store {
   }
 
   @override
+  dynamic carregarMaisRecentes() {
+    final _$actionInfo = _$ControllerBaseActionController.startAction(
+        name: 'ControllerBase.carregarMaisRecentes');
+    try {
+      return super.carregarMaisRecentes();
+    } finally {
+      _$ControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
+  void setPeriodoPopulares(int periodo) {
+    final _$actionInfo = _$ControllerBaseActionController.startAction(
+        name: 'ControllerBase.setPeriodoPopulares');
+    try {
+      return super.setPeriodoPopulares(periodo);
+    } finally {
+      _$ControllerBaseActionController.endAction(_$actionInfo);
+    }
+  }
+
+  @override
   String toString() {
     return '''
+periodoNoticiasPopulares: ${periodoNoticiasPopulares},
 secaoAtiva: ${secaoAtiva},
 titulo: ${titulo},
 selectedNavbarIndex: ${selectedNavbarIndex},
-noticiasRecentes: ${noticiasRecentes},
-carregandoRecentes: ${carregandoRecentes},
-carregandoPopulares: ${carregandoPopulares},
-carregandoRecentesPrimeiraVez: ${carregandoRecentesPrimeiraVez},
-carregandoPopularesPrimeiraVez: ${carregandoPopularesPrimeiraVez},
-noticiasPopulares: ${noticiasPopulares}
+mostrarLoading: ${mostrarLoading},
+noticiasExibidas: ${noticiasExibidas}
     ''';
   }
 }

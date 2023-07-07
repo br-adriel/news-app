@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
-import 'package:mobx/mobx.dart';
 import 'package:news_app/controller/home_screen.dart';
 import 'package:news_app/controller/searchbar.dart';
-import 'package:news_app/models/noticia_model.dart';
 import 'package:news_app/widgets/barra_superior.dart';
 import 'package:news_app/widgets/bottom_navigation_bar_widget.dart';
 import 'package:news_app/widgets/lista_noticias.dart';
@@ -33,27 +31,22 @@ class HomeScreen extends HookWidget {
     }, []);
 
     return Observer(builder: (_) {
-      ObservableList<Noticia> noticias = homeScreenController.noticiasRecentes;
-      bool mostrarLoading = homeScreenController.carregandoRecentesPrimeiraVez;
-
-      if (homeScreenController.secaoAtiva == SecaoAtiva.populares) {
-        noticias = homeScreenController.noticiasPopulares;
-        mostrarLoading = homeScreenController.carregandoPopularesPrimeiraVez;
-      }
-
       return Scaffold(
         appBar: BarraSuperior(
           titulo: homeScreenController.titulo,
           menuPopup: homeScreenController.secaoAtiva == SecaoAtiva.populares
-              ? MenuPeriodo()
+              ? MenuPeriodo(
+                  onSelected: homeScreenController.setPeriodoPopulares,
+                  selected: homeScreenController.periodoNoticiasPopulares,
+                )
               : null,
           searchbarController: searchbarController,
         ),
-        body: mostrarLoading
+        body: homeScreenController.mostrarLoading
             ? const LoadingCircular()
             : ListaNoticias(
-                noticias: noticias,
-                atualizar: () async {},
+                noticias: homeScreenController.noticiasExibidas,
+                atualizar: homeScreenController.atualizarSecao,
                 atingirFim: () async {}),
         bottomNavigationBar: BottomNavigationBarWidget(
             onTap: mudarSecao,

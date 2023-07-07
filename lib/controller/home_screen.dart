@@ -1,8 +1,6 @@
-import 'dart:convert';
-
-import 'package:flutter/services.dart';
 import 'package:mobx/mobx.dart';
 import 'package:news_app/models/noticia_model.dart';
+import 'package:news_app/service/noticia_service.dart';
 
 part 'home_screen.g.dart';
 
@@ -11,6 +9,13 @@ class HomeScreenController = ControllerBase with _$HomeScreenController;
 enum SecaoAtiva { recentes, populares }
 
 abstract class ControllerBase with Store {
+  int _indicePaginaRecente = 0;
+  List<Noticia> _noticiasRecentes = [];
+  List<Noticia> _noticiasPopulares = [];
+
+  @observable
+  int periodoNoticiasPopulares = 1;
+
   @observable
   SecaoAtiva secaoAtiva = SecaoAtiva.recentes;
 
@@ -20,64 +25,52 @@ abstract class ControllerBase with Store {
   @observable
   int selectedNavbarIndex = 0;
 
-  @observable
-  ObservableList<Noticia> noticiasRecentes = ObservableList.of([]);
+  bool _carregandoRecentes = false;
+  bool _carregandoPopulares = false;
+
+  bool _carregandoRecentesPrimeiraVez = true;
+  bool _carregandoPopularesPrimeiraVez = true;
 
   @observable
-  bool carregandoRecentes = false;
+  bool mostrarLoading = true;
 
   @observable
-  bool carregandoPopulares = false;
-
-  @observable
-  bool carregandoRecentesPrimeiraVez = true;
-
-  @observable
-  bool carregandoPopularesPrimeiraVez = true;
-
-  @observable
-  ObservableList<Noticia> noticiasPopulares = ObservableList.of([]);
+  ObservableList<Noticia> noticiasExibidas = ObservableList.of([]);
 
   Future<void> _carregarNoticiasRecentes() async {
-    if (carregandoRecentesPrimeiraVez == true) {
-      final String jsonString =
-          await rootBundle.loadString('assets/amostra.json');
+    if (!_carregandoRecentes) {
+      _carregandoRecentes = true;
 
-      // simula request a api  ---------------------------------------------------
-      Map<String, dynamic> dados = jsonDecode(jsonString);
-      Future.delayed(const Duration(seconds: 1));
-      // -------------------------------------------------------------------------
+      List<Noticia> noticiasCarregadas =
+          await NoticiaService.pesquisarArtigos('', _indicePaginaRecente);
+      _noticiasRecentes.addAll(noticiasCarregadas);
+      noticiasExibidas = ObservableList.of(_noticiasRecentes);
 
-      List<dynamic> noticiasNaoTratadas = dados["response"]["docs"];
-      noticiasRecentes.addAll(
-        noticiasNaoTratadas.map<Noticia>((noticiaNaoTratada) {
-          return Noticia.fromJson(noticiaNaoTratada);
-        }),
-      );
-      carregandoRecentesPrimeiraVez = false;
+      if (_carregandoRecentesPrimeiraVez == true) {
+        _carregandoRecentesPrimeiraVez = false;
+      }
+
+      _indicePaginaRecente++;
+      _carregandoRecentes = false;
+      mostrarLoading = false;
     }
   }
 
   Future<void> _carregarNoticiasPopulares() async {
-    if (carregandoPopularesPrimeiraVez == true) {
-      final String jsonString =
-          await rootBundle.loadString('assets/amostra.json');
+    if (!_carregandoPopulares) {
+      _carregandoPopulares = true;
 
-      // simula request a api  ---------------------------------------------------
-      Map<String, dynamic> dados = jsonDecode(jsonString);
-      Future.delayed(const Duration(seconds: 1));
-      // -------------------------------------------------------------------------
+      List<Noticia> noticiasCarregadas =
+          await NoticiaService.obterPostsPopulares(periodoNoticiasPopulares);
+      _noticiasPopulares.addAll(noticiasCarregadas);
+      noticiasExibidas = ObservableList.of(_noticiasPopulares);
 
-      List<dynamic> noticiasNaoTratadas = dados["response"]["docs"];
-      noticiasPopulares.addAll(
-        noticiasNaoTratadas
-            .map<Noticia>((noticiaNaoTratada) {
-              return Noticia.fromJson(noticiaNaoTratada);
-            })
-            .toList()
-            .reversed, // apenas para diferenciar as duas lista, remover depois
-      );
-      carregandoPopularesPrimeiraVez = false;
+      if (_carregandoPopularesPrimeiraVez == true) {
+        _carregandoPopularesPrimeiraVez = false;
+      }
+
+      _carregandoPopulares = false;
+      mostrarLoading = false;
     }
   }
 
@@ -87,17 +80,65 @@ abstract class ControllerBase with Store {
       secaoAtiva = SecaoAtiva.populares;
       titulo = "Popular news";
       selectedNavbarIndex = 1;
-      _carregarNoticiasPopulares();
+
+      if (_carregandoPopularesPrimeiraVez) {
+        mostrarLoading = true;
+        _carregarNoticiasPopulares();
+      } else {
+        noticiasExibidas = ObservableList.of(_noticiasPopulares);
+      }
     }
   }
 
   @action
   irParaRecentes() {
-    if (secaoAtiva != SecaoAtiva.recentes || carregandoRecentesPrimeiraVez) {
+    if (secaoAtiva != SecaoAtiva.recentes || _carregandoRecentesPrimeiraVez) {
       secaoAtiva = SecaoAtiva.recentes;
       titulo = "Latest news";
       selectedNavbarIndex = 0;
-      _carregarNoticiasRecentes();
+
+      if (_carregandoRecentesPrimeiraVez) {
+        mostrarLoading = true;
+        _indicePaginaRecente = 0;
+        _carregarNoticiasRecentes();
+      } else {
+        noticiasExibidas = ObservableList.of(_noticiasRecentes);
+      }
     }
+  }
+
+  @action
+  carregarMaisRecentes() {
+    _carregarNoticiasRecentes();
+  }
+
+  _atualizarRecentes() {
+    _indicePaginaRecente = 0;
+    _noticiasRecentes = List.of([]);
+    _carregandoRecentesPrimeiraVez = true;
+    mostrarLoading = true;
+    _carregarNoticiasRecentes();
+  }
+
+  _atualizarPopulares() {
+    _noticiasPopulares = List.of([]);
+    _carregandoPopularesPrimeiraVez = true;
+    mostrarLoading = true;
+    _carregarNoticiasPopulares();
+  }
+
+  @action
+  Future<void> atualizarSecao() async {
+    if (secaoAtiva == SecaoAtiva.recentes) {
+      _atualizarRecentes();
+    } else {
+      _atualizarPopulares();
+    }
+  }
+
+  @action
+  void setPeriodoPopulares(int periodo) {
+    periodoNoticiasPopulares = periodo;
+    _atualizarPopulares();
   }
 }

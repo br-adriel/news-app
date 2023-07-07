@@ -88,7 +88,7 @@ abstract class ControllerBase with Store {
 
     List<Noticia> noticias = noticiasNaoTratadas
         .map<Noticia>(
-          (noticiaNaoTratada) => Noticia.fromJson(noticiaNaoTratada),
+          (noticiaNaoTratada) => Noticia.fromJsonPesquisa(noticiaNaoTratada),
         )
         .toList();
 
