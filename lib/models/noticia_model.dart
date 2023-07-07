@@ -21,7 +21,7 @@ class Noticia {
     required this.url,
   });
 
-  factory Noticia.fromJson(Map<String, dynamic> json) {
+  factory Noticia.fromJsonPesquisa(Map<String, dynamic> json) {
     return Noticia(
       autor: json['byline']['original'] ?? 'Unknown author',
       dataPublicacao: DateTime.parse(json['pub_date']),
@@ -32,6 +32,21 @@ class Noticia {
       subtitulo: json['abstract'],
       titulo: json['headline']['main'],
       url: json['web_url'],
+    );
+  }
+
+  factory Noticia.fromJsonPopulares(Map<String, dynamic> json) {
+    return Noticia(
+      autor: json['byline'] ?? 'Unknown author',
+      dataPublicacao: DateTime.parse(json['published_date']),
+      imagemCapa: json['media'].length > 0
+          ? "${json['media'][0]['media-metadata'][2]['url']}"
+          : "",
+      numeroPalavras: 0,
+      primeiroParagrafo: 'Unavailable',
+      subtitulo: json['abstract'],
+      titulo: json['title'],
+      url: json['url'],
     );
   }
 }
