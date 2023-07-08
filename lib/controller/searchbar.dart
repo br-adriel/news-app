@@ -1,8 +1,6 @@
-import 'dart:convert';
-
-import 'package:flutter/services.dart';
 import 'package:mobx/mobx.dart';
 import 'package:news_app/models/noticia_model.dart';
+import 'package:news_app/service/noticia_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 part 'searchbar.g.dart';
@@ -11,6 +9,8 @@ class SearchbarController = ControllerBase with _$SearchbarController;
 
 abstract class ControllerBase with Store {
   SharedPreferences? prefs;
+  int _paginaAtual = 0;
+  bool _estaCarregando = false;
 
   @observable
   String pesquisa = '';
@@ -19,13 +19,13 @@ abstract class ControllerBase with Store {
   bool estaCarregandoPrimeiraVez = false;
 
   @observable
-  bool estaCarregando = false;
-
-  @observable
   ObservableList<String> sugestoes = ObservableList.of([]);
 
   @observable
   ObservableList<Noticia> resultados = ObservableList.of([]);
+
+  @observable
+  bool chegouAoFim = false;
 
   @action
   void setPesquisa(String termoBusca) {
@@ -69,35 +69,37 @@ abstract class ControllerBase with Store {
     }
   }
 
+  /// Função que inicia uma pesquisa
   @action
   Future<void> pesquisar() async {
-    if (pesquisa.isNotEmpty) {
-      estaCarregandoPrimeiraVez = true;
-      resultados = ObservableList.of([]);
+    estaCarregandoPrimeiraVez = true;
+    if (pesquisa.isNotEmpty && !_estaCarregando) {
+      _paginaAtual = 0;
+      chegouAoFim = false;
 
       _addSuggestion();
+
+      resultados = ObservableList.of([]);
+      await carregarOutraPagina();
     }
-
-    final String json = await rootBundle.loadString('assets/amostra.json');
-    Map<String, dynamic> dados = jsonDecode(json);
-
-    // imita consulta na api  --------------------------------------------------
-    List<dynamic> noticiasNaoTratadas = dados["response"]["docs"];
-    await Future.delayed(const Duration(seconds: 1));
-    // -------------------------------------------------------------------------
-
-    List<Noticia> noticias = noticiasNaoTratadas
-        .map<Noticia>(
-          (noticiaNaoTratada) => Noticia.fromJsonPesquisa(noticiaNaoTratada),
-        )
-        .toList();
-
-    resultados = ObservableList.of(
-      noticias.where(
-        (noticia) =>
-            noticia.titulo.toLowerCase().contains(pesquisa.toLowerCase()),
-      ),
-    );
     estaCarregandoPrimeiraVez = false;
+  }
+
+  @action
+  Future<void> carregarOutraPagina() async {
+    if (pesquisa.isNotEmpty && !_estaCarregando && !chegouAoFim) {
+      _estaCarregando = true;
+
+      List<Noticia> noticias =
+          await NoticiaService.pesquisarArtigos(pesquisa, _paginaAtual);
+      resultados.addAll(noticias);
+
+      if (noticias.isEmpty) {
+        chegouAoFim = true;
+      }
+
+      _paginaAtual++;
+      _estaCarregando = false;
+    }
   }
 }

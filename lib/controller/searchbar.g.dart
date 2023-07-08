@@ -42,22 +42,6 @@ mixin _$SearchbarController on ControllerBase, Store {
     });
   }
 
-  late final _$estaCarregandoAtom =
-      Atom(name: 'ControllerBase.estaCarregando', context: context);
-
-  @override
-  bool get estaCarregando {
-    _$estaCarregandoAtom.reportRead();
-    return super.estaCarregando;
-  }
-
-  @override
-  set estaCarregando(bool value) {
-    _$estaCarregandoAtom.reportWrite(value, super.estaCarregando, () {
-      super.estaCarregando = value;
-    });
-  }
-
   late final _$sugestoesAtom =
       Atom(name: 'ControllerBase.sugestoes', context: context);
 
@@ -90,6 +74,22 @@ mixin _$SearchbarController on ControllerBase, Store {
     });
   }
 
+  late final _$chegouAoFimAtom =
+      Atom(name: 'ControllerBase.chegouAoFim', context: context);
+
+  @override
+  bool get chegouAoFim {
+    _$chegouAoFimAtom.reportRead();
+    return super.chegouAoFim;
+  }
+
+  @override
+  set chegouAoFim(bool value) {
+    _$chegouAoFimAtom.reportWrite(value, super.chegouAoFim, () {
+      super.chegouAoFim = value;
+    });
+  }
+
   late final _$initSuggestionsAsyncAction =
       AsyncAction('ControllerBase.initSuggestions', context: context);
 
@@ -112,6 +112,15 @@ mixin _$SearchbarController on ControllerBase, Store {
   @override
   Future<void> pesquisar() {
     return _$pesquisarAsyncAction.run(() => super.pesquisar());
+  }
+
+  late final _$carregarOutraPaginaAsyncAction =
+      AsyncAction('ControllerBase.carregarOutraPagina', context: context);
+
+  @override
+  Future<void> carregarOutraPagina() {
+    return _$carregarOutraPaginaAsyncAction
+        .run(() => super.carregarOutraPagina());
   }
 
   late final _$ControllerBaseActionController =
@@ -144,9 +153,9 @@ mixin _$SearchbarController on ControllerBase, Store {
     return '''
 pesquisa: ${pesquisa},
 estaCarregandoPrimeiraVez: ${estaCarregandoPrimeiraVez},
-estaCarregando: ${estaCarregando},
 sugestoes: ${sugestoes},
-resultados: ${resultados}
+resultados: ${resultados},
+chegouAoFim: ${chegouAoFim}
     ''';
   }
 }
