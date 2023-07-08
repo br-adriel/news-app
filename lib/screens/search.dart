@@ -26,6 +26,7 @@ class SearchScreen extends StatelessWidget {
           noticias: searchbarController.resultados,
           atingirFim: () async {},
           atualizar: () async {},
+          mostrarSpinner: true,
         ),
       );
     });

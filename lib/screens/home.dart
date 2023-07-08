@@ -10,47 +10,52 @@ import 'package:news_app/widgets/loading_circular.dart';
 import 'package:news_app/widgets/menus_popup/menu_periodo.dart';
 
 class HomeScreen extends HookWidget {
-  final HomeScreenController homeScreenController = HomeScreenController();
+  final HomeScreenController homeController = HomeScreenController();
   final SearchbarController searchbarController = SearchbarController();
 
   HomeScreen({super.key});
 
   mudarSecao(int index) {
     if (index == 0) {
-      homeScreenController.irParaRecentes();
+      homeController.irParaRecentes();
     } else {
-      homeScreenController.irParaPopulares();
+      homeController.irParaPopulares();
     }
   }
 
   @override
   Widget build(BuildContext context) {
     useEffect(() {
-      homeScreenController.irParaRecentes();
+      homeController.irParaRecentes();
       return null;
     }, []);
 
     return Observer(builder: (_) {
       return Scaffold(
         appBar: BarraSuperior(
-          titulo: homeScreenController.titulo,
-          menuPopup: homeScreenController.secaoAtiva == SecaoAtiva.populares
+          titulo: homeController.titulo,
+          menuPopup: homeController.secaoAtiva == SecaoAtiva.populares
               ? MenuPeriodo(
-                  onSelected: homeScreenController.setPeriodoPopulares,
-                  selected: homeScreenController.periodoNoticiasPopulares,
+                  onSelected: homeController.setPeriodoPopulares,
+                  selected: homeController.periodoNoticiasPopulares,
                 )
               : null,
           searchbarController: searchbarController,
         ),
-        body: homeScreenController.mostrarLoading
+        body: homeController.mostrarLoading
             ? const LoadingCircular()
             : ListaNoticias(
-                noticias: homeScreenController.noticiasExibidas,
-                atualizar: homeScreenController.atualizarSecao,
-                atingirFim: () async {}),
+                noticias: homeController.noticiasExibidas,
+                atualizar: homeController.atualizarSecao,
+                atingirFim: homeController.carregarMaisNoticias,
+                mostrarSpinner:
+                    homeController.secaoAtiva == SecaoAtiva.populares
+                        ? false
+                        : !homeController.recentesChegouAoFim,
+              ),
         bottomNavigationBar: BottomNavigationBarWidget(
             onTap: mudarSecao,
-            selectedIndex: homeScreenController.selectedNavbarIndex),
+            selectedIndex: homeController.selectedNavbarIndex),
       );
     });
   }

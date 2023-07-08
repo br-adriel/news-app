@@ -24,7 +24,7 @@ class NoticiaService {
       _endpointPesquisa, // junta a url base com a parte da url da api de busca
       queryParameters: {
         "q": termoDeBusca, // coloca o termo de busca no fim da URL
-        "offset": (pagina * 10).toString(),
+        "page": pagina.toString(),
       },
     );
     String jsonString = resposta.data.toString();
