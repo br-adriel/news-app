@@ -90,6 +90,22 @@ mixin _$HomeScreenController on ControllerBase, Store {
     });
   }
 
+  late final _$recentesChegouAoFimAtom =
+      Atom(name: 'ControllerBase.recentesChegouAoFim', context: context);
+
+  @override
+  bool get recentesChegouAoFim {
+    _$recentesChegouAoFimAtom.reportRead();
+    return super.recentesChegouAoFim;
+  }
+
+  @override
+  set recentesChegouAoFim(bool value) {
+    _$recentesChegouAoFimAtom.reportWrite(value, super.recentesChegouAoFim, () {
+      super.recentesChegouAoFim = value;
+    });
+  }
+
   late final _$noticiasExibidasAtom =
       Atom(name: 'ControllerBase.noticiasExibidas', context: context);
 
@@ -104,6 +120,15 @@ mixin _$HomeScreenController on ControllerBase, Store {
     _$noticiasExibidasAtom.reportWrite(value, super.noticiasExibidas, () {
       super.noticiasExibidas = value;
     });
+  }
+
+  late final _$carregarMaisNoticiasAsyncAction =
+      AsyncAction('ControllerBase.carregarMaisNoticias', context: context);
+
+  @override
+  Future<void> carregarMaisNoticias() {
+    return _$carregarMaisNoticiasAsyncAction
+        .run(() => super.carregarMaisNoticias());
   }
 
   late final _$atualizarSecaoAsyncAction =
@@ -140,17 +165,6 @@ mixin _$HomeScreenController on ControllerBase, Store {
   }
 
   @override
-  dynamic carregarMaisRecentes() {
-    final _$actionInfo = _$ControllerBaseActionController.startAction(
-        name: 'ControllerBase.carregarMaisRecentes');
-    try {
-      return super.carregarMaisRecentes();
-    } finally {
-      _$ControllerBaseActionController.endAction(_$actionInfo);
-    }
-  }
-
-  @override
   void setPeriodoPopulares(int periodo) {
     final _$actionInfo = _$ControllerBaseActionController.startAction(
         name: 'ControllerBase.setPeriodoPopulares');
@@ -169,6 +183,7 @@ secaoAtiva: ${secaoAtiva},
 titulo: ${titulo},
 selectedNavbarIndex: ${selectedNavbarIndex},
 mostrarLoading: ${mostrarLoading},
+recentesChegouAoFim: ${recentesChegouAoFim},
 noticiasExibidas: ${noticiasExibidas}
     ''';
   }

@@ -13,6 +13,12 @@ abstract class ControllerBase with Store {
   List<Noticia> _noticiasRecentes = [];
   List<Noticia> _noticiasPopulares = [];
 
+  bool _carregandoRecentes = false;
+  bool _carregandoPopulares = false;
+
+  bool _carregandoRecentesPrimeiraVez = true;
+  bool _carregandoPopularesPrimeiraVez = true;
+
   @observable
   int periodoNoticiasPopulares = 1;
 
@@ -25,26 +31,30 @@ abstract class ControllerBase with Store {
   @observable
   int selectedNavbarIndex = 0;
 
-  bool _carregandoRecentes = false;
-  bool _carregandoPopulares = false;
-
-  bool _carregandoRecentesPrimeiraVez = true;
-  bool _carregandoPopularesPrimeiraVez = true;
-
   @observable
   bool mostrarLoading = true;
+
+  @observable
+  bool recentesChegouAoFim = false;
 
   @observable
   ObservableList<Noticia> noticiasExibidas = ObservableList.of([]);
 
   Future<void> _carregarNoticiasRecentes() async {
-    if (!_carregandoRecentes) {
+    if (!_carregandoRecentes && !recentesChegouAoFim) {
       _carregandoRecentes = true;
 
       List<Noticia> noticiasCarregadas =
           await NoticiaService.pesquisarArtigos('', _indicePaginaRecente);
-      _noticiasRecentes.addAll(noticiasCarregadas);
-      noticiasExibidas = ObservableList.of(_noticiasRecentes);
+      print(_indicePaginaRecente);
+      print(noticiasCarregadas);
+
+      if (noticiasCarregadas.isEmpty) {
+        recentesChegouAoFim = true;
+      } else {
+        _noticiasRecentes.addAll(noticiasCarregadas);
+        noticiasExibidas = ObservableList.of(_noticiasRecentes);
+      }
 
       if (_carregandoRecentesPrimeiraVez == true) {
         _carregandoRecentesPrimeiraVez = false;
@@ -72,6 +82,22 @@ abstract class ControllerBase with Store {
       _carregandoPopulares = false;
       mostrarLoading = false;
     }
+  }
+
+  _atualizarRecentes() {
+    _indicePaginaRecente = 0;
+    _noticiasRecentes = List.of([]);
+    _carregandoRecentesPrimeiraVez = true;
+    mostrarLoading = true;
+    recentesChegouAoFim = false;
+    _carregarNoticiasRecentes();
+  }
+
+  _atualizarPopulares() {
+    _noticiasPopulares = List.of([]);
+    _carregandoPopularesPrimeiraVez = true;
+    mostrarLoading = true;
+    _carregarNoticiasPopulares();
   }
 
   @action
@@ -108,23 +134,10 @@ abstract class ControllerBase with Store {
   }
 
   @action
-  carregarMaisRecentes() {
-    _carregarNoticiasRecentes();
-  }
-
-  _atualizarRecentes() {
-    _indicePaginaRecente = 0;
-    _noticiasRecentes = List.of([]);
-    _carregandoRecentesPrimeiraVez = true;
-    mostrarLoading = true;
-    _carregarNoticiasRecentes();
-  }
-
-  _atualizarPopulares() {
-    _noticiasPopulares = List.of([]);
-    _carregandoPopularesPrimeiraVez = true;
-    mostrarLoading = true;
-    _carregarNoticiasPopulares();
+  Future<void> carregarMaisNoticias() async {
+    if (secaoAtiva == SecaoAtiva.recentes) {
+      _carregarNoticiasRecentes();
+    }
   }
 
   @action
