@@ -46,8 +46,6 @@ abstract class ControllerBase with Store {
 
       List<Noticia> noticiasCarregadas =
           await NoticiaService.pesquisarArtigos('', _indicePaginaRecente);
-      print(_indicePaginaRecente);
-      print(noticiasCarregadas);
 
       if (noticiasCarregadas.isEmpty) {
         recentesChegouAoFim = true;
