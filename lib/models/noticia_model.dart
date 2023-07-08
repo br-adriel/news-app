@@ -21,17 +21,38 @@ class Noticia {
     required this.url,
   });
 
-  factory Noticia.fromJson(Map<String, dynamic> json) {
+  factory Noticia.fromJsonPesquisa(Map<String, dynamic> json) {
     return Noticia(
       autor: json['byline']['original'] ?? 'Unknown author',
       dataPublicacao: DateTime.parse(json['pub_date']),
-      imagemCapa:
-          "${dotenv.env['SITE_BASE_URL']}${json['multimedia'][0]['url']}",
+      imagemCapa: json['multimedia'] != null && json['multimedia'].length > 0
+          ? "${dotenv.env['SITE_BASE_URL']}${json['multimedia'][0]['url']}"
+          : "",
       numeroPalavras: json['word_count'],
       primeiroParagrafo: json['lead_paragraph'],
       subtitulo: json['abstract'],
       titulo: json['headline']['main'],
       url: json['web_url'],
     );
+  }
+
+  factory Noticia.fromJsonPopulares(Map<String, dynamic> json) {
+    return Noticia(
+      autor: json['byline'] ?? 'Unknown author',
+      dataPublicacao: DateTime.parse(json['published_date']),
+      imagemCapa: json['media'].length > 0
+          ? "${json['media'][0]['media-metadata'][2]['url']}"
+          : "",
+      numeroPalavras: 0,
+      primeiroParagrafo: 'Unavailable',
+      subtitulo: json['abstract'],
+      titulo: json['title'],
+      url: json['url'],
+    );
+  }
+
+  @override
+  String toString() {
+    return titulo;
   }
 }

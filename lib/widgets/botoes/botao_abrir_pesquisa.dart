@@ -76,10 +76,14 @@ class CustomDelegate extends SearchDelegate<String> {
   Widget buildSuggestions(BuildContext context) {
     return Observer(
       builder: (_) {
+        List<String> sugestoesExibidas = controller.sugestoes
+            .where((s) => s.toLowerCase().contains(query.toLowerCase()))
+            .toList();
+
         return ListView.builder(
-          itemCount: controller.sugestoes.length,
+          itemCount: sugestoesExibidas.length,
           itemBuilder: (context, index) {
-            final sugestao = controller.sugestoes.elementAt(index);
+            final sugestao = sugestoesExibidas.elementAt(index);
             return ListTile(
               title: Text(sugestao),
               onTap: () {

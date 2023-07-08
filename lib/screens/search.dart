@@ -24,8 +24,9 @@ class SearchScreen extends StatelessWidget {
       return Scaffold(
         body: ListaNoticias(
           noticias: searchbarController.resultados,
-          atingirFim: () async {},
-          atualizar: () async {},
+          atingirFim: searchbarController.carregarOutraPagina,
+          atualizar: searchbarController.pesquisar,
+          mostrarSpinner: !searchbarController.chegouAoFim,
         ),
       );
     });

@@ -18,12 +18,13 @@ class NoticiaService {
 
   // declarei a função como estática porque assim dá para usar sem ter que criar
   // um objeto sempre que for chamar o método
-  static Future<List<Noticia>> pesquisarArtigos(String termoDeBusca, int pagina) async {
+  static Future<List<Noticia>> pesquisarArtigos(
+      String termoDeBusca, int pagina) async {
     Response<String> resposta = await _dio.get(
       _endpointPesquisa, // junta a url base com a parte da url da api de busca
       queryParameters: {
         "q": termoDeBusca, // coloca o termo de busca no fim da URL
-        "offset": (pagina * 10).toString(),
+        "page": pagina.toString(),
       },
     );
     String jsonString = resposta.data.toString();
@@ -33,27 +34,23 @@ class NoticiaService {
       List<dynamic> noticiasNaoTratadas = dados["response"]["docs"];
       List<Noticia> noticias =
           noticiasNaoTratadas.map<Noticia>((noticiaNaoTratada) {
-        return Noticia.fromJson(noticiaNaoTratada);
+        return Noticia.fromJsonPesquisa(noticiaNaoTratada);
       }).toList();
       return noticias;
     }
     return List.empty();
   }
 
-  static Future<List<Noticia>> obterPostsPopulares(String periodo) async {
+  static Future<List<Noticia>> obterPostsPopulares(int periodo) async {
     String endpoint;
 
-    if (periodo == "Today") {
-      endpoint = "viewed/1.json";
-    } else if (periodo == "This week") {
-      endpoint = "viewed/7.json";
-    } else if (periodo == "This month") {
-      endpoint = "viewed/30.json";
+    if (periodo == 1 || periodo == 7 || periodo == 30) {
+      endpoint = "$periodo.json";
     } else {
       throw ArgumentError("Invalid period");
     }
 
-    Response<String> resposta = await _dio.get(_endpointPopulares + endpoint);
+    Response<String> resposta = await _dio.get("$_endpointPopulares$endpoint");
 
     String jsonString = resposta.data.toString();
     Map<String, dynamic> dados = jsonDecode(jsonString);
@@ -61,7 +58,7 @@ class NoticiaService {
     if (dados.containsKey("results")) {
       List<dynamic> postsPopulares = dados["results"];
       List<Noticia> noticias = postsPopulares.map<Noticia>((postPopular) {
-        return Noticia.fromJson(postPopular);
+        return Noticia.fromJsonPopulares(postPopular);
       }).toList();
       return noticias;
     }
@@ -69,5 +66,3 @@ class NoticiaService {
     return [];
   }
 }
-
-
