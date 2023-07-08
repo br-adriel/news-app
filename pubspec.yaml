@@ -33,4 +33,3 @@ flutter:
     - .env
     - assets/
     - assets/img/
-    - assets/amostra.json
