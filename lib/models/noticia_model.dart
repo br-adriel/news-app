@@ -25,8 +25,9 @@ class Noticia {
     return Noticia(
       autor: json['byline']['original'] ?? 'Unknown author',
       dataPublicacao: DateTime.parse(json['pub_date']),
-      imagemCapa:
-          "${dotenv.env['SITE_BASE_URL']}${json['multimedia'][0]['url']}",
+      imagemCapa: json['multimedia'] != null && json['multimedia'].length > 0
+          ? "${dotenv.env['SITE_BASE_URL']}${json['multimedia'][0]['url']}"
+          : "",
       numeroPalavras: json['word_count'],
       primeiroParagrafo: json['lead_paragraph'],
       subtitulo: json['abstract'],
@@ -48,5 +49,10 @@ class Noticia {
       titulo: json['title'],
       url: json['url'],
     );
+  }
+
+  @override
+  String toString() {
+    return titulo;
   }
 }
